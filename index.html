@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Sidebar with Icons and Tooltips</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        
+        #sidebar {
+            width: 220px;
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        #sidebar .nav-link {
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+
+        #sidebar .nav-link.active {
+            background-color: #495057;
+        }
+
+        #sidebar .category-icon {
+            display: none;
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .category-name {
+            transition: opacity 0.3s ease;
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            #sidebar {
+                width: 100px;
+                overflow: hidden;
+            }
+
+            .category-name {
+                display: none;
+            }
+
+            #sidebar .category-icon {
+                margin-right: 10px;
+                display: block;
+            }
+        }
+
+        #main-content {
+            padding: 20px;
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+        }
+
+        .nav-tabs {
+            overflow-x: auto;
+            white-space: nowrap;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .nav-tabs .nav-item {
+            flex: 0 0 auto;
+        }
+
+        .nav-tabs .nav-link {
+            white-space: nowrap;
+        }
+
+        .tooltip-inner {
+            background-color: #495057;
+        }
+
+        .tooltip .arrow::before {
+            border-top-color: #495057;
+        }
+
+        #categoryTabs {
+            overflow-y: hidden;
+        }
+
+        .card {
+            margin-bottom: 20px;
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            max-width: 250px; 
+            max-height: 250px;
+        }
+
+        @media (max-width: 768px) {
+            .product-image {
+                max-width: 150px; 
+                max-height: 150px;
+            }
+
+            #main-content h5 {
+                font-size: 1rem; 
+            }
+
+            #main-content .btn {
+                font-size: 0.8rem; 
+                padding: 5px 10px;
+            }
+            .list-group{
+                margin-left: -18px;
+            }
+            .category-icon{
+                margin-left: -12px;
+            }
+        }
+
+        
+        .product-image {
+            width: 250px; 
+            height: 250px;
+            transition: all 0.5s linear;
+        }
+        .product-image:hover{
+            transform: scale(1.1);
+        }
+        .btn-success{
+            border-radius: 15px;
+        }
+        
+.product-card {
+    border: 1px solid #ddd; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    padding: 15px; 
+    background-color: white; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.product-card:hover {
+    transform: scale(1.05); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+}
+.wishlist-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            color: red;
+            visibility: hidden;
+            transition: visibility 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .product-card:hover .wishlist-icon {
+            visibility: visible;
+            opacity: 1;
+        }
+        .fa-star{
+            color: #FFD700;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+              <img src="./Iyappaa_logo.png" width="120" height="60">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" ></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                      <a class="nav-link active me-4" aria-current="page" href="#" id="list-items">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link me-4" href="product.html"  id="list-items">All Products</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle me-4" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"  id="list-items">
+                        Categories
+                      </a>
+                      <ul class="dropdown-menu"  id="list-items">
+                        <li><a class="dropdown-item" href="#">Sweets</a></li>
+                        <li><a class="dropdown-item" href="#">Snacks</a></li>
+                        <li><a class="dropdown-item" href="#">Groceries</a></li>
+                        <li><a class="dropdown-item" href="#">Oil</a></li>
+                        <li><a class="dropdown-item" href="#">Rice</a></li>
+                        <li><a class="dropdown-item" href="#">Candies</a></li>
+                        <li><a class="dropdown-item" href="#">Organic Products</a></li>
+                        <li><a class="dropdown-item" href="#">Home Appliances</a></li>                  
+                      </ul>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="Aboutus.html"  id="list-items">About us</a>
+                    </li>
+                </ul>
+                <form class="d-flex search" role="search">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  
+                </form>
+                <button class="btn btn-outline-success" type="submit">Search</button>
+                  <button class="btn btn-outline-danger" type="submit" style="margin-left: 10px;">Login/Signup</button>
+            </div>
+        </div>
+    </nav><!--navbar-->
+
+
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="bg-dark">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active" data-category="snacks"
+                    data-toggle="tooltip" title="Snacks">
+                    <center><i class="fas fa-cookie-bite category-icon"></i></center><span class="category-name">Snacks</span>
+                
+                </a>
+                <a href="#" class="list-group-item list-group-item-action" data-category="sweets" data-toggle="tooltip"
+                    title="Sweets">
+                    <center><i class="fas fa-candy-cane category-icon"></center></i><span class="category-name">Sweets</span>
+                
+                </a>
+                <a href="#" class="list-group-item list-group-item-action" data-category="groceries"
+                    data-toggle="tooltip" title="Groceries">
+                    <center><i class="fas fa-shopping-basket category-icon"></i></center><span class="category-name">Groceries</span>
+                </a>
+            </div>
+        </nav>
+
+        
+        <div id="main-content" class="flex-grow-1">
+            
+            <ul class="nav nav-tabs" id="categoryTabs">
+                
+            </ul>
+
+        
+            <div class="tab-content" id="tabContent">
+                
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    
+    <script>
+        
+        const categoryData = {
+            snacks: ['Iyappaa', 'Amrith', 'Venba'],
+            sweets: ['Iyappaa', 'Amrith', 'Venba'],
+            groceries: ['Iyappaa', 'Anil', 'Narasu\'s', 'Cotha\'s', 'Manna Mix', 'LG', 'Rajam', 'Nijam', 'Tata', 'Lion Dates']
+        };
+    
+        const productData = {
+            Iyappaa: {
+                snacks: [
+                    { name: 'Murukku', image: './murukku.png' },
+                    { name: 'Banana Salt', image: './banana_salt.png' },
+                    { name: 'Casavva Salt', image: './casavva_salt.png' },
+                    { name: 'Banana Spicy', image: './banana_spicy.png' },
+                    { name: 'Blackallu', image: './blackallu.png' },
+                    { name: 'Whiteallu', image: './whiteallu.png' },
+                    { name: 'Peanut Halwa', image: './peanut_halwa.png' },
+                    { name: 'Peanut Ball', image: './peanut_ball.png' },
+                    { name: 'Sakaravaratti', image: './sakaravaratti.png' },
+                    { name: 'Kamarkat', image: './kamarkat.png' },
+                    { name: 'Plaintain Chips', image: './plaintain_chips.png' },
+                    { name: 'Spicy Plaintain Chips', image: './spicy_plaintain_chips.png' },
+                    { name: 'Casavva Spicy', image: './casavva_spicy.png' },
+                    { name: 'Casavva Finger Chips', image: './cassava_finger_chips.png' },
+                    { name: 'Achu Murukku', image: './achu_murukku.png' },
+                    { name: 'Casavva Finger Chips', image: './cassava_finger_chips.png' },
+                    { name: 'Kai Murukku', image: './kai_murukku.png' },
+                    { name: 'Rice Murukku', image: './rice_murukku.png' },
+                    { name: 'Casavva Plain Chips', image: './cassava_chips_plain.png' },
+                    { name: 'Mini Murukku', image: './mini_murukku.png' },
+                    { name: 'Large Murukku', image: './large_murukku.png' }
+                ],
+                sweets: [
+                    { name: 'Laddu', image: './ladduu.png' },
+                    { name: 'Jilabi', image: './jilabi.png' },
+                    { name: 'Mixed Halwa', image: 'mixed_halwa.png' },
+                    { name: 'Mysore Pak', image: './mysore_pak.png' }
+                ],
+                groceries: [
+                    { name: 'Kambu', image: './kambu.png' },
+                    { name: 'Horse Gram', image: './horse_gram.png' },
+                    { name: 'Ragi Powder', image: './ragi_powder.png' },
+                    { name: 'Sago', image: './sago.png'},
+                    { name: 'Coconut Powder', image: './coconut_powder.png'},
+                    { name: 'White Avul', image: './white_avul.png'},
+                    { name: 'Red Avul', image: './red_avul.png'},
+                    { name: 'Achu Vellam', image: './achu_vellam.png'},
+                    { name: 'Vellam Round', image: './vellam_round.png'},
+                    { name: 'Vellam Powder', image: './vellam_powder.png'},
+                    { name: 'Roasted Gram', image: './roasted_grams.png'},
+                    { name: 'Asafoetida Powder', image: './Asafoetida-powder.png'},
+                    { name: 'Garlic Powder', image: './garlic_powder.png'},
+                    { name: 'Garlic Kuranai', image: './garlic_kuranai.png'},
+                    { name: 'Dosa Batter', image: './dosa_batter.png'},
+                    { name: 'Sea Salt', image: './sea_salt.png'},
+                    { name: 'Himalayan Salt Powder', image: './Himalayan_salt_powder.png'},
+                    { name: 'Himalayan Crystal Salt', image: './Himalayan_crystal_salt.png'},
+                    { name: 'Appalam', image: './appalam.png'},
+                    { name: 'Color Fryums', image: './color_fryums.png'},
+                    { name: 'Fryums', image: './fryums.png'},
+                    { name: 'Mango Pickel', image: './mango_pickel.png'},
+                    { name: 'Lemon Pickel', image: './lemon_pickel.png'},
+                    { name: 'ChickPeas', image: './chickpeas.png'},
+                    { name: 'Raw Cashew', image: './raw_cashew.png'},
+                    { name: 'Raw Peanut', image: './raw_peanut.png'},
+                    { name: 'Roasted Cashew', image: './roasted_cashew.png'},
+                    { name: 'Roasted Peanut', image: './roasted_peanut.png'},
+                    { name: 'Dalia', image: './dalia.png'}
+                ]
+            },
+            Anil: {
+        groceries: [
+            { name: 'Ragi Vermicelli', image: './Ragi_Vermicelli.png' },
+            { name: 'Tarmarind Vermicelli', image: 'Tarmarind_Vermicelli.png' },
+            { name: 'Roastedshort Vermicelli', image: 'Roastedshort_Vermicelli.png' },
+            { name: 'Rice Vermicelli', image: 'Rice_Vermicelli.png' },
+            // add other Anil grocery products here
+        ]
+    },
+    'Narasu\'s': {
+        groceries: [
+            { name: 'Narasus Instant Strong', image: './Narasus_instant_strong.png' },
+            { name: 'Narasus Premium Blend', image: './Narasus_premium_blend.png' },
+            { name: 'Narasus Prue Strong', image: './Narasus_pure_strong.png' },
+            { name: 'Narasus Udhayam', image: './Narasus_udhayam.png' },
+        ]
+    },
+    'Cotha\'s': {
+        groceries: [
+            { name: 'Cothas Coffee Blend', image: './cothas_coffee_blend.png' },
+            { name: 'Cothas Speciality blend Coffee', image: './cothas_speciality_blend.png' }
+        ]
+    },
+    'Manna Mix': {
+        groceries: [
+            { name: 'Manna Mix', image: 'Manna_mix.png' },
+        ]
+    },
+    LG: {
+        groceries: [
+            { name: 'perungayam', image: './perungayam.png' },
+        ]
+    },
+    Rajam: {
+        groceries: [
+            { name: 'Rajam Sukku', image: 'Rajam_sukku.png' },
+        ]
+    },
+    Nijam: {
+        groceries: [
+            { name: 'Nijam Pakku', image: 'Nijam_pakku.png' }
+        ]
+    },
+    Tata: {
+        groceries: [
+            { name: 'Tata Salt', image: 'Tata_salt.png' },
+        ]
+    },
+    'Lion Dates': {
+        groceries: [
+            { name: 'Lion Dates', image: './Lion_dates.png'},
+            { name: 'Lion Dates Syrup', image: './Lion_dates_syrup.png' }
+        ]
+    },
+            Amrith: {
+                snacks: [
+                    { name: 'Product 10', image: 'https://via.placeholder.com/150?text=Product+10' },
+                    { name: 'Product 11', image: 'https://via.placeholder.com/150?text=Product+11' },
+                    { name: 'Product 12', image: 'https://via.placeholder.com/150?text=Product+12' }
+                ],
+                sweets: [
+                    { name: 'Product 13', image: 'https://via.placeholder.com/150?text=Product+13' },
+                    { name: 'Product 14', image: 'https://via.placeholder.com/150?text=Product+14' },
+                    { name: 'Product 15', image: 'https://via.placeholder.com/150?text=Product+15' }
+                ],
+                groceries: [
+                    { name: 'Product 16', image: 'https://via.placeholder.com/150?text=Product+16' },
+                    { name: 'Product 17', image: 'https://via.placeholder.com/150?text=Product+17' },
+                    { name: 'Product 18', image: 'https://via.placeholder.com/150?text=Product+18' }
+                ]
+            },
+            Venba: {
+                snacks: [
+                    { name: 'Product 19', image: 'https://via.placeholder.com/150?text=Product+19' },
+                    { name: 'Product 20', image: 'https://via.placeholder.com/150?text=Product+20' },
+                    { name: 'Product 21', image: 'https://via.placeholder.com/150?text=Product+21' }
+                ],
+                sweets: [
+                    { name: 'Product 22', image: 'https://via.placeholder.com/150?text=Product+22' },
+                    { name: 'Product 23', image: 'https://via.placeholder.com/150?text=Product+23' },
+                    { name: 'Product 24', image: 'https://via.placeholder.com/150?text=Product+24' }
+                ],
+                groceries: [
+                    { name: 'Product 25', image: 'https://via.placeholder.com/150?text=Product+25' },
+                    { name: 'Product 26', image: 'https://via.placeholder.com/150?text=Product+26' },
+                    { name: 'Product 27', image: 'https://via.placeholder.com/150?text=Product+27' }
+                ]
+            }
+        };
+    
+        function loadTabs(category) {
+            const tabs = $('#categoryTabs');
+            const tabContent = $('#tabContent');
+            tabs.empty();
+            tabContent.empty();
+    
+            const brands = categoryData[category];
+            brands.forEach((brand, index) => {
+                const isActive = index === 0 ? 'active' : '';
+    
+                
+                const tab = `<li class="nav-item">
+                                <a class="nav-link ${isActive}" id="tab-${index}" data-toggle="tab" href="#content-${index}">
+                                    ${brand}
+                                </a>
+                             </li>`;
+                tabs.append(tab);
+    
+                
+        
+                const content = `<div class="tab-pane fade show ${isActive}" id="content-${index}">
+                    <h3>${brand} - ${category.charAt(0).toUpperCase() + category.slice(1)}</h3>
+                    <div class="row">
+                        ${productData[brand][category].map(product => `
+                            <div class="col-md-4 text-center mb-4">
+                                <div class="product-card">
+                                    <img src="${product.image}" alt="${product.name}" class="img-fluid product-image">
+                                    <h5>${product.name}</h5>
+                                    <div class="ratings">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <a href="#" class="btn btn-success">Buy Now</a>
+                                    <i class="fas fa-heart wishlist-icon"></i> 
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+
+
+
+                tabContent.append(content);
+            });
+        }
+    
+        $(document).ready(function () {
+        
+            loadTabs('snacks');
+    
+            
+            $('#sidebar .list-group-item').click(function () {
+                $('#sidebar .list-group-item').removeClass('active');
+                $(this).addClass('active');
+    
+                const selectedCategory = $(this).data('category');
+                loadTabs(selectedCategory);
+            });
+    
+            
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.wishlist-icon').forEach(function(icon) {
+                icon.addEventListener('click', function() {
+                    const productCard = this.closest('.product-card');
+                    const productName = productCard.querySelector('h5').innerText;
+                    const productImage = productCard.querySelector('.product-image').src;
+
+                    addToWishlist({ name: productName, image: productImage });
+                });
+            });
+        });
+
+        function addToWishlist(product) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            wishlist.push(product);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            alert(`${product.name} has been added to your wishlist!`);
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+
+</html>

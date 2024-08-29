@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .wishlist-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .wishlist-item img {
+            width: 100px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .wishlist-item-info {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Wishlist</h1>
+    <div id="wishlist-container"></div>
+
+    <script>
+        function loadWishlist() {
+            const wishlistContainer = document.getElementById('wishlist-container');
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+            if (wishlist.length === 0) {
+                wishlistContainer.innerHTML = '<p>Your wishlist is empty.</p>';
+            } else {
+                wishlist.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'wishlist-item';
+                    itemElement.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="wishlist-item-info">
+                            <h3>${item.name}</h3>
+                            <p>${item.price}</p>
+                        </div>
+                    `;
+                    wishlistContainer.appendChild(itemElement);
+                });
+            }
+        }
+
+        window.onload = loadWishlist;
+    </script>
+</body>
+</html>
